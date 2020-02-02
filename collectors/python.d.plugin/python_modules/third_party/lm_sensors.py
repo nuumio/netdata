@@ -13,12 +13,13 @@ see example.py for high level API usage.
 
 from ctypes import *
 import ctypes.util
+import os
 
-_libc = cdll.LoadLibrary(ctypes.util.find_library("c"))
+_libc = cdll.LoadLibrary(os.getenv("NETDATA_LIBC_PATH", ctypes.util.find_library("c")))
 # see https://github.com/paroj/sensors.py/issues/1
 _libc.free.argtypes = [c_void_p]
 
-_hdl = cdll.LoadLibrary(ctypes.util.find_library("sensors"))
+_hdl = cdll.LoadLibrary(os.getenv("NETDATA_LIBSENSORS_PATH", ctypes.util.find_library("sensors")))
 
 version = c_char_p.in_dll(_hdl, "libsensors_version").value.decode("ascii")
 
